@@ -98,3 +98,20 @@ def test_creation_of_combi_purchase_options():
             assert freebie in skus
 
 
+@pytest.mark.parametrize("skus_to_buy,expected_price", [
+    ("X", 50),
+    ("XX", 100),
+    ("XXX", 120),
+    ("XXZ", 120),
+    ("YZX", 120),
+])
+def test_checkout_with_combi_purchase(skus_to_buy, expected_price):
+    skus = "XYZ"
+
+    pos = [PurchaseOption(sku=sku, quantity=1, price=50) for sku in skus]
+    pos += PurchaseOption.create_combi_purchase_options(skus, 3, 120)
+    
+    assert Checkout(pos).checkout(skus_to_buy) == expected_price
+
+
+
