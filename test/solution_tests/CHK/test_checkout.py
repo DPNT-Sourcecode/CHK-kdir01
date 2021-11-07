@@ -2,17 +2,19 @@ import pytest
 from solutions.CHK.checkout_solution import Checkout, PurchaseOption
 
 TEST_PURCHASE_OPTIONS = [
-    PurchaseOption(sku="A", quantity=1, price=50, freebies=()),
-    PurchaseOption(sku="A", quantity=3, price=130, freebies=()),
-    PurchaseOption(sku="A", quantity=5, price=200, freebies=()),
-    PurchaseOption(sku="B", quantity=1, price=30, freebies=()),
-    PurchaseOption(sku="B", quantity=2, price=45, freebies=()),
-    PurchaseOption(sku="C", quantity=1, price=20, freebies=()),
-    PurchaseOption(sku="D", quantity=1, price=15, freebies=()),
-    PurchaseOption(sku="E", quantity=1, price=40, freebies=()),
-    PurchaseOption(sku="E", quantity=2, price=80, freebies=tuple("B")),
-    PurchaseOption(sku="F", quantity=1, price=10, freebies=()),
-    PurchaseOption(sku="F", quantity=3, price=20, freebies=())
+    PurchaseOption(sku="A", quantity=1, price=50),
+    PurchaseOption(sku="A", quantity=3, price=130),
+    PurchaseOption(sku="A", quantity=5, price=200),
+    PurchaseOption(sku="B", quantity=1, price=30),
+    PurchaseOption(sku="B", quantity=2, price=45),
+    PurchaseOption(sku="C", quantity=1, price=20),
+    PurchaseOption(sku="D", quantity=1, price=15),
+    PurchaseOption(sku="E", quantity=1, price=40),
+    PurchaseOption(sku="E", quantity=2, price=80, freebies="B"),
+    PurchaseOption(sku="F", quantity=1, price=10),
+    PurchaseOption(sku="F", quantity=3, price=20),
+    PurchaseOption(sku="G", quantity=1, price=10),
+    PurchaseOption(sku="G", quantity=2, price=20, freebies="BB"),
 ]
 
 
@@ -49,6 +51,8 @@ def checkout():
     ("EBE", 80),
     ("AAAAAEEAAABC", 200 + 80 + 130 + 20),
     ("AAAAAEEAAAC", 200 + 80 + 130 + 20),
+    ("G", 10),
+    ("GGBB", 20),
 ])
 def test_checkout(checkout, skus, price):
     assert checkout.checkout(skus) == price
@@ -63,12 +67,12 @@ def test_when_illegal_input_then_returns_minus_one(checkout, skus):
 
 
 def test_offers_sorted_by_most_valuable():
-    least_valuable = PurchaseOption(sku="A", quantity=3, price=3 * 20, freebies=())
-    most_valuable = PurchaseOption(sku="A", quantity=2, price=2 * 10, freebies=())
-    middle_valuable = PurchaseOption(sku="A", quantity=4, price=4 * 15, freebies=())
+    least_valuable = PurchaseOption(sku="A", quantity=3, price=3 * 20)
+    most_valuable = PurchaseOption(sku="A", quantity=2, price=2 * 10)
+    middle_valuable = PurchaseOption(sku="A", quantity=4, price=4 * 15)
 
     checkout = Checkout([
-        PurchaseOption(sku="A", quantity=1, price=100, freebies=()),
+        PurchaseOption(sku="A", quantity=1, price=100),
         least_valuable,
         most_valuable,
         middle_valuable,
@@ -84,7 +88,7 @@ def test_creation_of_combi_purchase_options():
 
     pos = PurchaseOption.create_combi_purchase_options(skus, quantity, price)
 
-    assert len(pos) == 4 ** 3  # 4 places, 3 options for each
+    assert len(pos) == 15  # One can check there are 15 options
 
     for po in pos:
         assert po.price == price
@@ -92,3 +96,4 @@ def test_creation_of_combi_purchase_options():
         assert po.quantity + len(po.freebies) == quantity
         for freebie in po.freebies:
             assert freebie in skus
+

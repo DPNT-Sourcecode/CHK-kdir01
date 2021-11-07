@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 import itertools
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 
 @dataclass
@@ -12,7 +12,7 @@ class PurchaseOption:
     sku: str
     quantity: int
     price: int
-    freebies: Tuple
+    freebies: str = ""
 
     @staticmethod
     def create_combi_purchase_options(skus: str, quantity: int, price: int) -> List[PurchaseOption]:
@@ -21,16 +21,16 @@ class PurchaseOption:
         """
         def create_po(sku_list):
             main_sku = sku_list[0]
-            freebies = []
+            freebies = ""
             main_sku_count = 0
 
             for sku in sku_list:
                 if sku != main_sku:
-                    freebies.append(sku)
+                    freebies += sku
                 else:
                     main_sku_count += 1
 
-            return PurchaseOption(sku=main_sku, quantity=main_sku_count, price=price, freebies=tuple(freebies))
+            return PurchaseOption(sku=main_sku, quantity=main_sku_count, price=price, freebies=freebies)
 
         return [
             create_po(sku_list)
@@ -41,47 +41,47 @@ class PurchaseOption:
 # TODO: Add some way to read in input - talk to management about the format.
 # TODO: Might help to be able to help with "3R get one Q free" also (as in you need to calculate the cost)
 PURCHASE_OPTIONS = [
-    PurchaseOption(sku="A", quantity=1, price=50, freebies=()),
-    PurchaseOption(sku="A", quantity=3, price=130, freebies=()),
-    PurchaseOption(sku="A", quantity=5, price=200, freebies=()),
-    PurchaseOption(sku="B", quantity=1, price=30, freebies=()),
-    PurchaseOption(sku="B", quantity=2, price=45, freebies=()),
-    PurchaseOption(sku="C", quantity=1, price=20, freebies=()),
-    PurchaseOption(sku="D", quantity=1, price=15, freebies=()),
-    PurchaseOption(sku="E", quantity=1, price=40, freebies=()),
-    PurchaseOption(sku="E", quantity=2, price=80, freebies=tuple("B")),
-    PurchaseOption(sku="F", quantity=1, price=10, freebies=()),
-    PurchaseOption(sku="F", quantity=3, price=20, freebies=()),
-    PurchaseOption(sku="G", quantity=1, price=20, freebies=()),
-    PurchaseOption(sku="H", quantity=1, price=10, freebies=()),
-    PurchaseOption(sku="H", quantity=5, price=45, freebies=()),
-    PurchaseOption(sku="H", quantity=10, price=80, freebies=()),
-    PurchaseOption(sku="I", quantity=1, price=35, freebies=()),
-    PurchaseOption(sku="J", quantity=1, price=60, freebies=()),
-    PurchaseOption(sku="K", quantity=1, price=70, freebies=()),
-    PurchaseOption(sku="K", quantity=2, price=120, freebies=()),
-    PurchaseOption(sku="L", quantity=1, price=90, freebies=()),
-    PurchaseOption(sku="M", quantity=1, price=15, freebies=()),
-    PurchaseOption(sku="N", quantity=1, price=40, freebies=()),
-    PurchaseOption(sku="N", quantity=3, price=120, freebies=tuple("M")),
-    PurchaseOption(sku="O", quantity=1, price=10, freebies=()),
-    PurchaseOption(sku="P", quantity=1, price=50, freebies=()),
-    PurchaseOption(sku="P", quantity=5, price=200, freebies=()),
-    PurchaseOption(sku="Q", quantity=1, price=30, freebies=()),
-    PurchaseOption(sku="Q", quantity=3, price=80, freebies=()),
-    PurchaseOption(sku="R", quantity=1, price=50, freebies=()),
-    PurchaseOption(sku="R", quantity=3, price=150, freebies=tuple("Q")),
-    PurchaseOption(sku="S", quantity=1, price=20, freebies=()),
-    PurchaseOption(sku="T", quantity=1, price=20, freebies=()),
-    PurchaseOption(sku="U", quantity=1, price=40, freebies=()),
-    PurchaseOption(sku="U", quantity=4, price=120, freebies=()),
-    PurchaseOption(sku="V", quantity=1, price=50, freebies=()),
-    PurchaseOption(sku="V", quantity=2, price=90, freebies=()),
-    PurchaseOption(sku="V", quantity=3, price=130, freebies=()),
-    PurchaseOption(sku="W", quantity=1, price=20, freebies=()),
-    PurchaseOption(sku="X", quantity=1, price=17, freebies=()),
-    PurchaseOption(sku="Y", quantity=1, price=20, freebies=()),
-    PurchaseOption(sku="Z", quantity=1, price=21, freebies=()),
+    PurchaseOption(sku="A", quantity=1, price=50),
+    PurchaseOption(sku="A", quantity=3, price=130),
+    PurchaseOption(sku="A", quantity=5, price=200),
+    PurchaseOption(sku="B", quantity=1, price=30),
+    PurchaseOption(sku="B", quantity=2, price=45),
+    PurchaseOption(sku="C", quantity=1, price=20),
+    PurchaseOption(sku="D", quantity=1, price=15),
+    PurchaseOption(sku="E", quantity=1, price=40),
+    PurchaseOption(sku="E", quantity=2, price=80, freebies="B"),
+    PurchaseOption(sku="F", quantity=1, price=10),
+    PurchaseOption(sku="F", quantity=3, price=20),
+    PurchaseOption(sku="G", quantity=1, price=20),
+    PurchaseOption(sku="H", quantity=1, price=10),
+    PurchaseOption(sku="H", quantity=5, price=45),
+    PurchaseOption(sku="H", quantity=10, price=80),
+    PurchaseOption(sku="I", quantity=1, price=35),
+    PurchaseOption(sku="J", quantity=1, price=60),
+    PurchaseOption(sku="K", quantity=1, price=70),
+    PurchaseOption(sku="K", quantity=2, price=120),
+    PurchaseOption(sku="L", quantity=1, price=90),
+    PurchaseOption(sku="M", quantity=1, price=15),
+    PurchaseOption(sku="N", quantity=1, price=40),
+    PurchaseOption(sku="N", quantity=3, price=120, freebies="M"),
+    PurchaseOption(sku="O", quantity=1, price=10),
+    PurchaseOption(sku="P", quantity=1, price=50),
+    PurchaseOption(sku="P", quantity=5, price=200),
+    PurchaseOption(sku="Q", quantity=1, price=30),
+    PurchaseOption(sku="Q", quantity=3, price=80),
+    PurchaseOption(sku="R", quantity=1, price=50),
+    PurchaseOption(sku="R", quantity=3, price=150, freebies="Q"),
+    PurchaseOption(sku="S", quantity=1, price=20),
+    PurchaseOption(sku="T", quantity=1, price=20),
+    PurchaseOption(sku="U", quantity=1, price=40),
+    PurchaseOption(sku="U", quantity=4, price=120),
+    PurchaseOption(sku="V", quantity=1, price=50),
+    PurchaseOption(sku="V", quantity=2, price=90),
+    PurchaseOption(sku="V", quantity=3, price=130),
+    PurchaseOption(sku="W", quantity=1, price=20),
+    PurchaseOption(sku="X", quantity=1, price=17),
+    PurchaseOption(sku="Y", quantity=1, price=20),
+    PurchaseOption(sku="Z", quantity=1, price=21),
 ]
 
 PURCHASE_OPTIONS += PurchaseOption.create_combi_purchase_options("STXYZ", 3, 45)
@@ -184,4 +184,5 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
 
