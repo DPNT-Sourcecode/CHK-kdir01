@@ -6,7 +6,24 @@ PurchaseOption = namedtuple("OfferInfo", ["sku", "quantity", "price", "freebies"
 
 
 def create_combi_purchase_options(skus: str, quantity: int, price: int):
-    return itertools.combinations_with_replacement(skus, r)
+    def create_po(sku_list):
+        main_sku = sku_list[0]
+        freebies = []
+        main_sku_count = 0
+
+        for sku in sku_list:
+            if sku != main_sku:
+                freebies.append(sku)
+            else:
+                main_sku_count += 1
+
+        return PurchaseOption(sku=main_sku, quantity=main_sku_count, price=price, freebies=freebies)
+
+    return [
+        create_po(sku_list)
+        for sku_list in itertools.combinations_with_replacement(skus, quantity)
+    ]
+
 
 
 # TODO: Add some way to read in input - talk to management about the format.
@@ -155,5 +172,6 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
 
 
