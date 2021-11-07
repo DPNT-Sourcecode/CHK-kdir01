@@ -44,7 +44,6 @@ class Checkout:
 
         # TODO: Maybe should validate the offers don't mention skus that can't be bought singly?
         # TODO: Other validation (quantity +ve etc.)
-        # TODO: Decide if inputting all POs in the same format is the right way to go
 
     def checkout(self, skus: str) -> int:
         try:
@@ -78,6 +77,7 @@ class Checkout:
 
     @staticmethod
     def _is_offer_applicable(offer: PurchaseOption, sku_count):
+        # TODO: refactor PurchaseOption to not consider freebies and main sku separately
         # TODO: would be nice not to have to construct this repeatedly, but not a big deal
         # TODO: here we assume that no offer has freebies of the main sku
         offer_count = Counter(offer.freebies)
@@ -114,4 +114,5 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
 
