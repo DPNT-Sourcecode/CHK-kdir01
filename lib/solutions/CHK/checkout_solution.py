@@ -1,10 +1,12 @@
 from collections import Counter, defaultdict, namedtuple
+import itertools
 from typing import Dict, List
 
 PurchaseOption = namedtuple("OfferInfo", ["sku", "quantity", "price", "freebies"])
 
+
 def create_combi_purchase_options(skus: str, quantity: int, price: int):
-    
+    return itertools.combinations_with_replacement(skus, r)
 
 
 # TODO: Add some way to read in input - talk to management about the format.
@@ -153,4 +155,5 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
 
