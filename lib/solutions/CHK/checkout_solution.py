@@ -25,7 +25,7 @@ class Checkout:
         }
         self.purchase_option_by_sku: Dict[str: PurchaseOption] = {
             po.sku: po for po in purchase_options
-            if po.quantity >= 1
+            if po.quantity > 1
         }
 
     def checkout(self, skus: str) -> int:
@@ -68,3 +68,4 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
