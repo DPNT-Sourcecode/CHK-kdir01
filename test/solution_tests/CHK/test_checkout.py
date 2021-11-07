@@ -110,8 +110,9 @@ def test_checkout_with_combi_purchase(skus_to_buy, expected_price):
 
     pos = [PurchaseOption(sku=sku, quantity=1, price=50) for sku in skus]
     pos += PurchaseOption.create_combi_purchase_options(skus, 3, 120)
-    
+
     assert Checkout(pos).checkout(skus_to_buy) == expected_price
+
 
 
 
