@@ -1,19 +1,16 @@
 from collections import Counter, namedtuple
-from typing import Dict
+from typing import Dict, List
 
-SKU_PRICES = {
-    "A": 50,
-    "B": 30,
-    "C": 20,
-    "D": 15,
-    "E": 40,
-}
+PurchaseOption = namedtuple("OfferInfo", ["sku", "quantity", "price"])
 
-OfferInfo = namedtuple("OfferInfo", ["sku", "quantity", "price"])
-
-OFFERS = [
-    OfferInfo(sku="A", quantity=3, price=130),
-    OfferInfo(sku="B", quantity=2, price=45)
+PURCHASE_OPTIONS = [
+    PurchaseOption(sku="A", quantity=3, price=130),
+    PurchaseOption(sku="B", quantity=2, price=45),
+    PurchaseOption(sku="A", quantity=1, price=50),
+    PurchaseOption(sku="B", quantity=1, price=30),
+    PurchaseOption(sku="C", quantity=1, price=20),
+    PurchaseOption(sku="D", quantity=1, price=15),
+    PurchaseOption(sku="E", quantity=1, price=40),
 ]
 
 
@@ -21,9 +18,15 @@ class Checkout:
 
     ERROR_RETURN_CODE = -1
 
-    def __init__(self, prices, offers):
-        self.prices_by_sku: Dict[str, int] = prices
-        self.offers_by_sku: Dict[str: OfferInfo] = {offer.sku: offer for offer in offers}
+    def __init__(self, purchase_options: List[PurchaseOption]):
+        self.prices_by_sku: Dict[str, int] = {
+            po.sku: po.price for po in purchase_options
+            if po.quantity == 1
+        }
+        self.purchase_option_by_sku: Dict[str: PurchaseOption] = {
+            po.sku: po for po in purchase_options
+            if po.quantity >= 1
+        }
 
     def checkout(self, skus: str) -> int:
         try:
@@ -37,7 +40,7 @@ class Checkout:
         price = 0
 
         for sku, count in sku_count.items():
-            offer: OfferInfo = self.offers_by_sku.get(sku)
+            offer: PurchaseOption = self.purchase_option_by_sku.get(sku)
 
             if offer:
                 instances_of_offer = count // offer.quantity
@@ -64,4 +67,4 @@ class Checkout:
 # noinspection PyUnusedLocal
 # skus = unicode string
 def checkout(skus: str) -> int:
-    return Checkout(SKU_PRICES, OFFERS).checkout(skus)
+    return Checkout(PURCHASE_OPTIONS).checkout(skus)
