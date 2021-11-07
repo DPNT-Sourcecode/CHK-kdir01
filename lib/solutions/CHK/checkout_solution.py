@@ -8,6 +8,9 @@ from typing import Dict, List
 
 @dataclass
 class PurchaseOption:
+    """
+    Represents a purchase option for customers in terms of a collection of skus for a given price.
+    """
 
     sku: str
     quantity: int
@@ -184,5 +187,6 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
 
 

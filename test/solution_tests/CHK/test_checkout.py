@@ -19,7 +19,7 @@ TEST_PURCHASE_OPTIONS = [
 
 
 @pytest.fixture
-def checkout():
+def default_checkout():
     return Checkout(TEST_PURCHASE_OPTIONS)
 
 
@@ -54,16 +54,16 @@ def checkout():
     ("G", 10),
     ("GGBB", 20),
 ])
-def test_checkout(checkout, skus, price):
-    assert checkout.checkout(skus) == price
+def test_checkout(default_checkout, skus, price):
+    assert default_checkout.checkout(skus) == price
 
 
 @pytest.mark.parametrize("skus", [
     "Z*",
     11,
 ])
-def test_when_illegal_input_then_returns_minus_one(checkout, skus):
-    assert checkout.checkout(skus) == -1
+def test_when_illegal_input_then_returns_minus_one(default_checkout, skus):
+    assert default_checkout.checkout(skus) == -1
 
 
 def test_offers_sorted_by_most_valuable():
@@ -96,4 +96,5 @@ def test_creation_of_combi_purchase_options():
         assert po.quantity + len(po.freebies) == quantity
         for freebie in po.freebies:
             assert freebie in skus
+
 
