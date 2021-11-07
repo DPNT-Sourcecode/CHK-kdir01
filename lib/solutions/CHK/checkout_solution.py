@@ -63,7 +63,7 @@ class Checkout:
 
     def _sort_offers_by_most_valuable(self):
         for offers in self.offers_by_sku.values():
-            offers.sort()
+            offers.sort(key=self._calculate_po_saving)
 
     def _validate_and_get_counter(self, skus) -> Counter:
         if type(skus) != str:
@@ -82,7 +82,3 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
-
-
-
-

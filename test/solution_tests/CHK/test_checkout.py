@@ -29,3 +29,18 @@ def test_checkout(skus, price):
 ])
 def test_when_illegal_input_then_returns_minus_one(skus):
     assert checkout_solution.checkout(skus) == -1
+
+
+def test_offers_sorted_by_most_valuable():
+    least_valuable = checkout_solution.PurchaseOption(sku="A", quantity=3, price=3 * 20)
+    most_valuable = checkout_solution.PurchaseOption(sku="A", quantity=2, price=2 * 10)
+    middle_valuable = checkout_solution.PurchaseOption(sku="A", quantity=4, price=4 * 15)
+
+    checkout = checkout_solution.Checkout([
+        checkout_solution.PurchaseOption(sku="A", quantity=1, price=100),
+        least_valuable,
+        most_valuable,
+        middle_valuable,
+    ])
+
+    assert checkout.offers_by_sku["A"] == [most_valuable, middle_valuable, least_valuable]
