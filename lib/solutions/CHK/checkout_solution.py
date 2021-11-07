@@ -23,8 +23,8 @@ class Checkout:
     Calculates the cost of items bought at checkout.
 
     We assume that:
-     * the offers input are "well balanced" meaning you can take them in the order of savings per
-       item and get the best result.
+     * the offers input are "well balanced" meaning you can take them in the order of percentage saving
+       and get the best result.
      * the input PurchaseOptions allow every item to be bought individually.
     """
 
@@ -87,17 +87,16 @@ class Checkout:
 
         return all(sku in sku_count and sku_count[sku] >= offer_count[sku] for sku in offer_count)
 
-    def _calculate_po_saving_per_item(self, po: PurchaseOption):
+    def _calculate_percentage_po_saving(self, po: PurchaseOption):
         individual_cost = self.prices_by_sku[po.sku] * po.quantity
         for free_sku in po.freebies:
             individual_cost += self.prices_by_sku[free_sku]
         total_saving = individual_cost - po.price
-        total_items = po.quantity + len(po.freebies)
 
-        return total_saving / total_items
+        return total_saving / individual_cost
 
     def _sort_offers_by_most_valuable(self, offers: List[PurchaseOption]):
-        offers.sort(key=self._calculate_po_saving_per_item, reverse=True)
+        offers.sort(key=self._calculate_percentage_po_saving, reverse=True)
 
     def _validate_and_get_counter(self, skus) -> Counter:
         if type(skus) != str:
@@ -116,3 +115,4 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
