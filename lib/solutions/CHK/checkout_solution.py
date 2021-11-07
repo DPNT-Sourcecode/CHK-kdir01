@@ -38,7 +38,9 @@ class Checkout:
             else:
                 self.offers_from_best_by_sku[po.sku].append(po)
 
-        self._sort_offers_by_most_valuable()
+        # This should make later sorting faster as the order will be more nearly correct.
+        for offers in self.offers_from_best_by_sku.values():
+            self._sort_offers_by_most_valuable(offers)
 
         # TODO: Maybe should validate the offers don't mention skus that can't be bought singly?
         # TODO: Other validation (quantity +ve etc.)
@@ -53,21 +55,29 @@ class Checkout:
         return self._get_price(sku_count)
 
     def _get_price(self, sku_count: Counter) -> int:
+        offers_for_these_skus = []
+        for sku in sku_count:
+            offers_for_these_skus += self.offers_from_best_by_sku[sku]
+        self._sort_offers_by_most_valuable(offers_for_these_skus)
+
         price = 0
 
+        # Handle offers
+        for offer in offers_for_these_skus:
+            while self._is_offer_applicable(offer, sku_count):
+                price += offer.price
+                sku_count -= Counter({offer.sku: offer.quantity})
+                for freebie in offer.freebies:
+                    sku_count -= Counter({freebie: 1})
+
+        # Handle non-offers
         for sku, count in sku_count.items():
-            offers: List[PurchaseOption] = self.offers_from_best_by_sku.get(sku)
-
-            if offers:
-                for offer in offers:
-                    instances_of_offer = count // offer.quantity
-                    price += instances_of_offer * offer.price
-                    count -= instances_of_offer * offer.quantity
-                    # TODO: freebies not accounted for
-
             price += self.prices_by_sku[sku] * count
 
         return price
+
+    def _is_offer_applicable(self, offer: PurchaseOption, sku_count):
+        pass
 
     def _calculate_po_saving_per_item(self, po: PurchaseOption):
         individual_cost = self.prices_by_sku[po.sku] * po.quantity
@@ -78,9 +88,8 @@ class Checkout:
 
         return total_saving / total_items
 
-    def _sort_offers_by_most_valuable(self):
-        for offers in self.offers_from_best_by_sku.values():
-            offers.sort(key=self._calculate_po_saving_per_item, reverse=True)
+    def _sort_offers_by_most_valuable(self, offers: List[PurchaseOption]):
+        offers.sort(key=self._calculate_po_saving_per_item, reverse=True)
 
     def _validate_and_get_counter(self, skus) -> Counter:
         if type(skus) != str:
@@ -99,6 +108,7 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
 
 
 
