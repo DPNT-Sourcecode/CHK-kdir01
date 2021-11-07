@@ -31,21 +31,20 @@ class Checkout:
         except ValueError:
             return self.ERROR_RETURN_CODE
 
-        prices = [self._get_price_for_sku(sku, count) for sku, count in sku_count.items()]
+        return self._get_price(sku_count)
 
-        return sum(prices)
-
-    def _get_price_for_sku(self, sku: str, count: int) -> int:
+    def _get_price(self, sku_count: Counter) -> int:
         price = 0
 
-        offer: OfferInfo = self.offers_by_sku.get(sku)
+        for sku, count in sku_count.items():
+            offer: OfferInfo = self.offers_by_sku.get(sku)
 
-        if offer:
-            instances_of_offer = count // offer.quantity
-            price += instances_of_offer * offer.price
-            count -= instances_of_offer * offer.quantity
+            if offer:
+                instances_of_offer = count // offer.quantity
+                price += instances_of_offer * offer.price
+                count -= instances_of_offer * offer.quantity
 
-        price += self.prices_by_sku[sku] * count
+            price += self.prices_by_sku[sku] * count
 
         return price
 
