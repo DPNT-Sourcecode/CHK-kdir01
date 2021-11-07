@@ -13,5 +13,8 @@ SKU_PRICES = {
 def checkout(skus: str) -> int:
     sku_count = Counter(skus)
 
+    prices = [SKU_PRICES[sku] * count for sku, count in sku_count.items()]
+
+    return sum(prices)
 
 
