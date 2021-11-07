@@ -18,8 +18,11 @@ def checkout(skus: str) -> int:
 
     sku_count = Counter(skus)
 
-    if SKU_PRICES.keys() 
+    for sku in sku_count:
+        if sku not in SKU_PRICES:
+            return ERROR_RETURN_CODE
 
     prices = [SKU_PRICES[sku] * count for sku, count in sku_count.items()]
 
     return sum(prices)
+
