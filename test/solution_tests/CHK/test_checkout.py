@@ -76,3 +76,19 @@ def test_offers_sorted_by_most_valuable():
 
     assert checkout.offers_from_best_by_sku["A"] == [most_valuable, middle_valuable, least_valuable]
 
+
+def test_creation_of_combi_purchase_options():
+    skus = "XYZ"
+    price = 100
+    quantity = 4
+
+    pos = PurchaseOption.create_combi_purchase_options(skus, quantity, price)
+
+    assert len(pos) == 4 ** 3  # 4 places, 3 options for each
+
+    for po in pos:
+        assert po.price == price
+        assert po.sku in skus
+        assert po.quantity + len(po.freebies) == quantity
+        for freebie in po.freebies:
+            assert freebie in skus
