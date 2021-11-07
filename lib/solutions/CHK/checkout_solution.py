@@ -34,8 +34,16 @@ class Checkout:
         return sum(prices)
 
     def get_price_for_sku(self, sku: str, count: int) -> int:
-        offer = self.offers_by_sku.
-        return self.prices_by_sku[sku] * count
+        price = 0
+
+        offer = self.offers_by_sku.get(sku)
+
+        if offer:
+
+
+        price += self.prices_by_sku[sku] * count
+
+        return price
 
     def _validate_and_get_counter(self, skus) -> Counter:
         if type(skus) != str:
@@ -54,6 +62,7 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(SKU_PRICES, OFFERS).checkout(skus)
+
 
 
 
