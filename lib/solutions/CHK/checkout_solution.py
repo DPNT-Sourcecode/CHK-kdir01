@@ -29,14 +29,15 @@ class Checkout:
         except ValueError:
             return self.ERROR_RETURN_CODE
 
-        prices = [self.prices_by_sku[sku] * count for sku, count in sku_count.items()]
+        prices = [self.get_price_for_sku(sku, count) for sku, count in sku_count.items()]
 
         return sum(prices)
 
-    def get_price_for_sku(self, sku: str) -> int:
-        pass
+    def get_price_for_sku(self, sku: str, count: int) -> int:
+        offer = self.offers_by_sku.
+        return self.prices_by_sku[sku] * count
 
-    def _validate_and_get_counter(self, skus) -> Counter[str]:
+    def _validate_and_get_counter(self, skus) -> Counter:
         if type(skus) != str:
             raise ValueError
 
@@ -53,6 +54,7 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(SKU_PRICES, OFFERS).checkout(skus)
+
 
 
 
