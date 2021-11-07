@@ -1,4 +1,4 @@
-from collections import Counter
+from collections import Counter, namedtuple
 
 SKU_PRICES = {
     "A": 50,
@@ -7,22 +7,32 @@ SKU_PRICES = {
     "D": 15,
 }
 
-ERROR_RETURN_CODE = -1
 
+
+class Checkout:
+
+    ERROR_RETURN_CODE = -1
+
+    def __init__(self, prices, offers):
+        self.prices = prices
+        self.offers = offers
+
+    def checkout(self, skus: str) -> int:
+        if type(skus) != str:
+            return self.ERROR_RETURN_CODE
+
+        sku_count = Counter(skus)
+
+        for sku in sku_count:
+            if sku not in self.prices:
+                return self.ERROR_RETURN_CODE
+
+        prices = [self.prices[sku] * count for sku, count in sku_count.items()]
+
+        return sum(prices)
 
 # noinspection PyUnusedLocal
 # skus = unicode string
 def checkout(skus: str) -> int:
-    if type(skus) != str:
-        return ERROR_RETURN_CODE
-
-    sku_count = Counter(skus)
-
-    for sku in sku_count:
-        if sku not in SKU_PRICES:
-            return ERROR_RETURN_CODE
-
-    prices = [SKU_PRICES[sku] * count for sku, count in sku_count.items()]
-
-    return sum(prices)
+    return Checkout(SKU_PRICES, ).checkout()
 
