@@ -20,15 +20,16 @@ class Checkout:
 
     def __init__(self, purchase_options: List[PurchaseOption]):
         self.prices_by_sku: Dict[str, int] = {}
-        self.purchase_options_by_sku: Dict[str: PurchaseOption] = defaultdict(list)
+        self.offers_by_sku: Dict[str: PurchaseOption] = defaultdict(list)
 
         for po in purchase_options:
             if po.quantity == 1:
                 self.prices_by_sku[po.sku] = po.price
             else:
-                self.purchase_options_by_sku[po.sku].append(po)
+                self.offers_by_sku[po.sku].append(po)
 
-        # TODO: Maybe should validate the offers don't mention skus that can't be bought singly? Other validation (quantity +ve etc.)
+        # TODO: Maybe should validate the offers don't mention skus that can't be bought singly?
+        # TODO: Other validation (quantity +ve etc.)
         # TODO: Decide if inputting all POs in the same format is the right way to go
 
     def checkout(self, skus: str) -> int:
@@ -43,7 +44,7 @@ class Checkout:
         price = 0
 
         for sku, count in sku_count.items():
-            offers: List[PurchaseOption] = self.purchase_options_by_sku.get(sku)
+            offers: List[PurchaseOption] = self.offers_by_sku.get(sku)
 
             if offers:
                 offer = offers[0]
@@ -59,6 +60,10 @@ class Checkout:
         individual_cost = self.prices_by_sku[po.sku] * po.quantity
 
         return individual_cost - po.price
+
+    def _sort_offers_by_most_valuable(self):
+        for offers in self.offers_by_sku.values():
+            offers.sort()
 
     def _validate_and_get_counter(self, skus) -> Counter:
         if type(skus) != str:
@@ -77,6 +82,7 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
 
 
 
