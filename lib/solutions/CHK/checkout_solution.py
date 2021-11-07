@@ -9,10 +9,12 @@ PURCHASE_OPTIONS = [
     PurchaseOption(sku="C", quantity=1, price=20, freebies=()),
     PurchaseOption(sku="D", quantity=1, price=15, freebies=()),
     PurchaseOption(sku="E", quantity=1, price=40, freebies=()),
+    PurchaseOption(sku="F", quantity=1, price=10, freebies=()),
     PurchaseOption(sku="A", quantity=3, price=130, freebies=()),
     PurchaseOption(sku="A", quantity=5, price=200, freebies=()),
     PurchaseOption(sku="B", quantity=2, price=45, freebies=()),
     PurchaseOption(sku="E", quantity=2, price=80, freebies=tuple("B")),
+    PurchaseOption(sku="F", quantity=3, price=20, freebies=()),
 ]
 
 
@@ -114,3 +116,4 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
