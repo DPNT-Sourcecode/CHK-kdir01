@@ -3,7 +3,8 @@ from typing import Dict, List
 
 PurchaseOption = namedtuple("OfferInfo", ["sku", "quantity", "price", "freebies"])
 
-# TODO: Add some way to read in input - talk to management about the format
+# TODO: Add some way to read in input - talk to management about the format.
+# TODO: Might help to be able to help with "3R get one Q free" also (as in you need to calculate the cost)
 PURCHASE_OPTIONS = [
     PurchaseOption(sku="A", quantity=1, price=50, freebies=()),
     PurchaseOption(sku="A", quantity=3, price=130, freebies=()),
@@ -146,5 +147,6 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
 
 
