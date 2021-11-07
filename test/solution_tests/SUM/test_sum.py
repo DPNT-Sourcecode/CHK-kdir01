@@ -11,4 +11,3 @@ from solutions.SUM import sum_solution
 ])
 def test_sum(left, right, expected):
     assert sum_solution.compute(left, right) == expected
-
