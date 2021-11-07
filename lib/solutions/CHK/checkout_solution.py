@@ -83,7 +83,7 @@ class Checkout:
         offer_count = Counter(offer.freebies)
         offer_count[offer.sku] = offer.quantity
 
-        return all(sku in sku_count and sku_count[sku] > offer_count[sku] for sku in offer_count)
+        return all(sku in sku_count and sku_count[sku] >= offer_count[sku] for sku in offer_count)
 
     def _calculate_po_saving_per_item(self, po: PurchaseOption):
         individual_cost = self.prices_by_sku[po.sku] * po.quantity
@@ -114,3 +114,4 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
