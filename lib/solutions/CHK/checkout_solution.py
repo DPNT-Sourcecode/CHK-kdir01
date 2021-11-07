@@ -17,7 +17,7 @@ class PurchaseOption:
     @staticmethod
     def create_combi_purchase_options(skus: str, quantity: int, price: int) -> List[PurchaseOption]:
         """
-        Creates
+        Creates a list of PurchaseOptions corresponding to: "buy any <quantity> of <skus> for <price>"
         """
         def create_po(sku_list):
             main_sku = sku_list[0]
@@ -113,7 +113,7 @@ class Checkout:
         for offers in self.offers_from_best_by_sku.values():
             self._sort_offers_by_most_valuable(offers)
 
-        # TODO: Maybe should validate the offers don't mention skus that can't be bought singly?
+        # TODO: Maybe should validate that offers don't mention skus that can't be bought singly?
         # TODO: Other validation (quantity +ve etc.)
 
     def checkout(self, skus: str) -> int:
@@ -149,7 +149,7 @@ class Checkout:
     @staticmethod
     def _is_offer_applicable(offer: PurchaseOption, sku_count):
         # TODO: refactor PurchaseOption to not consider freebies and main sku separately
-        # TODO: would be nice not to have to construct this repeatedly, but not a big deal
+        # TODO: would be nice not to have to construct this Counter repeatedly, but not a big deal
         # TODO: here we assume that no offer has freebies of the main sku
         offer_count = Counter(offer.freebies)
         offer_count[offer.sku] = offer.quantity
@@ -184,3 +184,4 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
