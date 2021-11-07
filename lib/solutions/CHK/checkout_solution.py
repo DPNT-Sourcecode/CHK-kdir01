@@ -7,6 +7,12 @@ SKU_PRICES = {
     "D": 15,
 }
 
+OfferInfo = namedtuple("OfferInfo", ["sku", "quantity", "price"])
+
+OFFERS = [
+    OfferInfo(sku="A", quantity=3, price=130),
+    OfferInfo(sku="B", quantity=2, price=45)
+]
 
 
 class Checkout:
@@ -31,8 +37,10 @@ class Checkout:
 
         return sum(prices)
 
+
 # noinspection PyUnusedLocal
 # skus = unicode string
 def checkout(skus: str) -> int:
-    return Checkout(SKU_PRICES, ).checkout()
+    return Checkout(SKU_PRICES, OFFERS).checkout(skus)
+
 
