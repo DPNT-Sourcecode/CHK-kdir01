@@ -76,8 +76,14 @@ class Checkout:
 
         return price
 
-    def _is_offer_applicable(self, offer: PurchaseOption, sku_count):
-        pass
+    @staticmethod
+    def _is_offer_applicable(offer: PurchaseOption, sku_count):
+        # TODO: would be nice not to have to construct this repeatedly, but not a big deal
+        # TODO: here we assume that no offer has freebies of the main sku
+        offer_count = Counter(offer.freebies)
+        offer_count[offer.sku] = offer.quantity
+
+        return all(sku in sku_count and sku_count[sku] > offer_count[sku] for sku in offer_count)
 
     def _calculate_po_saving_per_item(self, po: PurchaseOption):
         individual_cost = self.prices_by_sku[po.sku] * po.quantity
