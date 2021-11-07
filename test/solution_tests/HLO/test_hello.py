@@ -1,5 +1,13 @@
+import pytest
+
 from solutions.HLO import hello_solution
 
 
-def test_hello():
-    assert hello_solution.hello("Tim") == hello_solution.WELCOME_MESSAGE
+@pytest.mark.parametrize("name,expected", [
+    ("John", "Hello, John!"),
+    ("Tim", "Hello, Tim!"),
+    ("", "Hello, !"),
+])
+def test_hello(name, expected):
+    assert hello_solution.hello(name) == expected
+
