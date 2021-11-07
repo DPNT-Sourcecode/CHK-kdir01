@@ -1,29 +1,41 @@
-from collections import Counter, defaultdict, namedtuple
+from __future__ import annotations
+
+from collections import Counter, defaultdict
+from dataclasses import dataclass
 import itertools
-from typing import Dict, List
-
-PurchaseOption = namedtuple("OfferInfo", ["sku", "quantity", "price", "freebies"])
+from typing import Dict, List, Tuple
 
 
-def create_combi_purchase_options(skus: str, quantity: int, price: int):
-    def create_po(sku_list):
-        main_sku = sku_list[0]
-        freebies = []
-        main_sku_count = 0
+@dataclass
+class PurchaseOption:
 
-        for sku in sku_list:
-            if sku != main_sku:
-                freebies.append(sku)
-            else:
-                main_sku_count += 1
+    sku: str
+    quantity: int
+    price: int
+    freebies: Tuple
 
-        return PurchaseOption(sku=main_sku, quantity=main_sku_count, price=price, freebies=freebies)
+    @staticmethod
+    def create_combi_purchase_options(skus: str, quantity: int, price: int) -> List[PurchaseOption]:
+        """
+        Creates
+        """
+        def create_po(sku_list):
+            main_sku = sku_list[0]
+            freebies = []
+            main_sku_count = 0
 
-    return [
-        create_po(sku_list)
-        for sku_list in itertools.combinations_with_replacement(skus, quantity)
-    ]
+            for sku in sku_list:
+                if sku != main_sku:
+                    freebies.append(sku)
+                else:
+                    main_sku_count += 1
 
+            return PurchaseOption(sku=main_sku, quantity=main_sku_count, price=price, freebies=tuple(freebies))
+
+        return [
+            create_po(sku_list)
+            for sku_list in itertools.combinations_with_replacement(skus, quantity)
+        ]
 
 
 # TODO: Add some way to read in input - talk to management about the format.
@@ -72,7 +84,7 @@ PURCHASE_OPTIONS = [
     PurchaseOption(sku="Z", quantity=1, price=21, freebies=()),
 ]
 
-PURCHASE_OPTIONS += create_combi_purchase_options("STXYZ", 3, 45)
+PURCHASE_OPTIONS += PurchaseOption.create_combi_purchase_options("STXYZ", 3, 45)
 
 
 class Checkout:
@@ -172,6 +184,7 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
 
 
 
