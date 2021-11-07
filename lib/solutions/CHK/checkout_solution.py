@@ -6,6 +6,7 @@ SKU_PRICES = {
     "B": 30,
     "C": 20,
     "D": 15,
+    "E": 40,
 }
 
 OfferInfo = namedtuple("OfferInfo", ["sku", "quantity", "price"])
@@ -65,9 +66,3 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(SKU_PRICES, OFFERS).checkout(skus)
-
-
-
-
-
-

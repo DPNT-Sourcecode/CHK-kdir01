@@ -6,6 +6,8 @@ from solutions.CHK import checkout_solution
     ("A", 50),
     ("B", 30),
     ("C", 20),
+    ("D", 15),
+    ("E", 40),
     ("", 0),
     ("AA", 100),
     ("ABC", 100),
@@ -27,5 +29,3 @@ def test_checkout(skus, price):
 ])
 def test_when_illegal_input_then_returns_minus_one(skus):
     assert checkout_solution.checkout(skus) == -1
-
-
