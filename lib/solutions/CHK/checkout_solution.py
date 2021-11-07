@@ -4,17 +4,26 @@ from typing import Dict, List
 PurchaseOption = namedtuple("OfferInfo", ["sku", "quantity", "price"])
 
 PURCHASE_OPTIONS = [
-    PurchaseOption(sku="A", quantity=3, price=130),
-    PurchaseOption(sku="B", quantity=2, price=45),
     PurchaseOption(sku="A", quantity=1, price=50),
     PurchaseOption(sku="B", quantity=1, price=30),
     PurchaseOption(sku="C", quantity=1, price=20),
     PurchaseOption(sku="D", quantity=1, price=15),
     PurchaseOption(sku="E", quantity=1, price=40),
+    PurchaseOption(sku="A", quantity=3, price=130),
+    PurchaseOption(sku="A", quantity=5, price=200),
+    PurchaseOption(sku="B", quantity=2, price=45),
 ]
 
 
 class Checkout:
+    """
+    Calculates the cost of items bought at checkout.
+
+    We assume that:
+     * the offers input are "well balanced" meaning you can take them in the order of savings per
+       item and get the best result.
+     * the input PurchaseOptions allow every item to be bought individually.
+    """
 
     ERROR_RETURN_CODE = -1
 
@@ -85,3 +94,4 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+

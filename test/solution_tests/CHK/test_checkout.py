@@ -17,7 +17,8 @@ from solutions.CHK import checkout_solution
     ("ABABA", 130 + 45),
     ("AACA", 130 + 20),
     ("BBBB", 45 * 2),
-    ("BBCBB", 45 * 2 + 20)
+    ("BBCBB", 45 * 2 + 20),
+    ("AAAAA", 200)
 ])
 def test_checkout(skus, price):
     assert checkout_solution.checkout(skus) == price
@@ -44,3 +45,4 @@ def test_offers_sorted_by_most_valuable():
     ])
 
     assert checkout.offers_by_sku["A"] == [most_valuable, middle_valuable, least_valuable]
+
