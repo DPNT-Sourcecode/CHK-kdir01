@@ -3,6 +3,10 @@ from typing import Dict, List
 
 PurchaseOption = namedtuple("OfferInfo", ["sku", "quantity", "price", "freebies"])
 
+def create_combi_purchase_options(skus: str, quantity: int, price: int):
+    
+
+
 # TODO: Add some way to read in input - talk to management about the format.
 # TODO: Might help to be able to help with "3R get one Q free" also (as in you need to calculate the cost)
 PURCHASE_OPTIONS = [
@@ -23,8 +27,8 @@ PURCHASE_OPTIONS = [
     PurchaseOption(sku="H", quantity=10, price=80, freebies=()),
     PurchaseOption(sku="I", quantity=1, price=35, freebies=()),
     PurchaseOption(sku="J", quantity=1, price=60, freebies=()),
-    PurchaseOption(sku="K", quantity=1, price=80, freebies=()),
-    PurchaseOption(sku="K", quantity=2, price=150, freebies=()),
+    PurchaseOption(sku="K", quantity=1, price=70, freebies=()),
+    PurchaseOption(sku="K", quantity=2, price=120, freebies=()),
     PurchaseOption(sku="L", quantity=1, price=90, freebies=()),
     PurchaseOption(sku="M", quantity=1, price=15, freebies=()),
     PurchaseOption(sku="N", quantity=1, price=40, freebies=()),
@@ -36,7 +40,7 @@ PURCHASE_OPTIONS = [
     PurchaseOption(sku="Q", quantity=3, price=80, freebies=()),
     PurchaseOption(sku="R", quantity=1, price=50, freebies=()),
     PurchaseOption(sku="R", quantity=3, price=150, freebies=tuple("Q")),
-    PurchaseOption(sku="S", quantity=1, price=30, freebies=()),
+    PurchaseOption(sku="S", quantity=1, price=20, freebies=()),
     PurchaseOption(sku="T", quantity=1, price=20, freebies=()),
     PurchaseOption(sku="U", quantity=1, price=40, freebies=()),
     PurchaseOption(sku="U", quantity=4, price=120, freebies=()),
@@ -44,10 +48,12 @@ PURCHASE_OPTIONS = [
     PurchaseOption(sku="V", quantity=2, price=90, freebies=()),
     PurchaseOption(sku="V", quantity=3, price=130, freebies=()),
     PurchaseOption(sku="W", quantity=1, price=20, freebies=()),
-    PurchaseOption(sku="X", quantity=1, price=90, freebies=()),
-    PurchaseOption(sku="Y", quantity=1, price=10, freebies=()),
-    PurchaseOption(sku="Z", quantity=1, price=50, freebies=()),
+    PurchaseOption(sku="X", quantity=1, price=17, freebies=()),
+    PurchaseOption(sku="Y", quantity=1, price=20, freebies=()),
+    PurchaseOption(sku="Z", quantity=1, price=21, freebies=()),
 ]
+
+PURCHASE_OPTIONS += create_combi_purchase_options("STXYZ", 3, 45)
 
 
 class Checkout:
@@ -147,3 +153,4 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
