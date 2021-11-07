@@ -43,9 +43,10 @@ class Checkout:
         price = 0
 
         for sku, count in sku_count.items():
-            offer: PurchaseOption = self.purchase_options_by_sku.get(sku)[0]
+            offers: List[PurchaseOption] = self.purchase_options_by_sku.get(sku)
 
-            if offer:
+            if offers:
+                offer = offers[0]
                 instances_of_offer = count // offer.quantity
                 price += instances_of_offer * offer.price
                 count -= instances_of_offer * offer.quantity
@@ -76,5 +77,6 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
 
 
