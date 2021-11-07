@@ -56,4 +56,3 @@ def test_offers_sorted_by_most_valuable():
     ])
 
     assert checkout.offers_from_best_by_sku["A"] == [most_valuable, middle_valuable, least_valuable]
-
