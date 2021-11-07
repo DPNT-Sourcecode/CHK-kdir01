@@ -1,17 +1,17 @@
 from collections import Counter, defaultdict, namedtuple
 from typing import Dict, List
 
-PurchaseOption = namedtuple("OfferInfo", ["sku", "quantity", "price"])
+PurchaseOption = namedtuple("OfferInfo", ["sku", "quantity", "price", "freebies"])
 
 PURCHASE_OPTIONS = [
-    PurchaseOption(sku="A", quantity=1, price=50),
-    PurchaseOption(sku="B", quantity=1, price=30),
-    PurchaseOption(sku="C", quantity=1, price=20),
-    PurchaseOption(sku="D", quantity=1, price=15),
-    PurchaseOption(sku="E", quantity=1, price=40),
-    PurchaseOption(sku="A", quantity=3, price=130),
-    PurchaseOption(sku="A", quantity=5, price=200),
-    PurchaseOption(sku="B", quantity=2, price=45),
+    PurchaseOption(sku="A", quantity=1, price=50, freebies=[]),
+    PurchaseOption(sku="B", quantity=1, price=30, freebies=[]),
+    PurchaseOption(sku="C", quantity=1, price=20, freebies=[]),
+    PurchaseOption(sku="D", quantity=1, price=15, freebies=[]),
+    PurchaseOption(sku="E", quantity=1, price=40, freebies=[]),
+    PurchaseOption(sku="A", quantity=3, price=130, freebies=[]),
+    PurchaseOption(sku="A", quantity=5, price=200, freebies=[]),
+    PurchaseOption(sku="B", quantity=2, price=45, freebies=[]),
 ]
 
 
@@ -29,13 +29,13 @@ class Checkout:
 
     def __init__(self, purchase_options: List[PurchaseOption]):
         self.prices_by_sku: Dict[str, int] = {}
-        self.offers_by_sku: Dict[str: PurchaseOption] = defaultdict(list)
+        self.offers_from_best_by_sku: Dict[str: PurchaseOption] = defaultdict(list)
 
         for po in purchase_options:
             if po.quantity == 1:
                 self.prices_by_sku[po.sku] = po.price
             else:
-                self.offers_by_sku[po.sku].append(po)
+                self.offers_from_best_by_sku[po.sku].append(po)
 
         self._sort_offers_by_most_valuable()
 
@@ -55,13 +55,13 @@ class Checkout:
         price = 0
 
         for sku, count in sku_count.items():
-            offers: List[PurchaseOption] = self.offers_by_sku.get(sku)
+            offers: List[PurchaseOption] = self.offers_from_best_by_sku.get(sku)
 
             if offers:
-                offer = offers[0]
-                instances_of_offer = count // offer.quantity
-                price += instances_of_offer * offer.price
-                count -= instances_of_offer * offer.quantity
+                for offer in offers:
+                    instances_of_offer = count // offer.quantity
+                    price += instances_of_offer * offer.price
+                    count -= instances_of_offer * offer.quantity
 
             price += self.prices_by_sku[sku] * count
 
@@ -74,7 +74,7 @@ class Checkout:
         return total_saving / po.quantity
 
     def _sort_offers_by_most_valuable(self):
-        for offers in self.offers_by_sku.values():
+        for offers in self.offers_from_best_by_sku.values():
             offers.sort(key=self._calculate_po_saving_per_item, reverse=True)
 
     def _validate_and_get_counter(self, skus) -> Counter:
@@ -94,4 +94,5 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
 
