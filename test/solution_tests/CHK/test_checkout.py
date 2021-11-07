@@ -14,6 +14,8 @@ from solutions.CHK import checkout_solution
     ("BB", 45),
     ("ABABA", 130 + 45),
     ("AACA", 130 + 20),
+    ("BBBB", 45 * 2),
+    ("BBCBB", 45 * 2 + 20)
 ])
 def test_checkout(skus, price):
     assert checkout_solution.checkout(skus) == price
@@ -25,4 +27,5 @@ def test_checkout(skus, price):
 ])
 def test_when_illegal_input_then_returns_minus_one(skus):
     assert checkout_solution.checkout(skus) == -1
+
 

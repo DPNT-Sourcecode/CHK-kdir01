@@ -1,4 +1,5 @@
 from collections import Counter, namedtuple
+from typing import Dict
 
 SKU_PRICES = {
     "A": 50,
@@ -20,8 +21,8 @@ class Checkout:
     ERROR_RETURN_CODE = -1
 
     def __init__(self, prices, offers):
-        self.prices_by_sku = prices
-        self.offers_by_sku = { offer.sku: offer for offer in offers }
+        self.prices_by_sku: Dict[str, int] = prices
+        self.offers_by_sku: Dict[str: OfferInfo] = {offer.sku: offer for offer in offers}
 
     def checkout(self, skus: str) -> int:
         try:
@@ -29,17 +30,19 @@ class Checkout:
         except ValueError:
             return self.ERROR_RETURN_CODE
 
-        prices = [self.get_price_for_sku(sku, count) for sku, count in sku_count.items()]
+        prices = [self._get_price_for_sku(sku, count) for sku, count in sku_count.items()]
 
         return sum(prices)
 
-    def get_price_for_sku(self, sku: str, count: int) -> int:
+    def _get_price_for_sku(self, sku: str, count: int) -> int:
         price = 0
 
-        offer = self.offers_by_sku.get(sku)
+        offer: OfferInfo = self.offers_by_sku.get(sku)
 
         if offer:
-
+            instances_of_offer = count // offer.quantity
+            price += instances_of_offer * offer.price
+            count -= instances_of_offer * offer.quantity
 
         price += self.prices_by_sku[sku] * count
 
@@ -62,6 +65,7 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(SKU_PRICES, OFFERS).checkout(skus)
+
 
 
 
