@@ -10,4 +10,3 @@ from solutions.HLO import hello_solution
 ])
 def test_hello(name, expected):
     assert hello_solution.hello(name) == expected
-

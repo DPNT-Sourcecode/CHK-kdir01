@@ -14,3 +14,10 @@ from solutions.CHK import checkout_solution
 def test_checkout(skus, price):
     assert checkout_solution.checkout(skus) == price
 
+
+@pytest.mark.parametrize("skus", [
+    ("Z"),
+    (11),
+])
+def test_when_illegal_input_then_returns_minus_one(skus):
+    assert checkout_solution.checkout(skus) == -1
