@@ -1,5 +1,24 @@
 import pytest
-from solutions.CHK import checkout_solution
+from solutions.CHK.checkout_solution import Checkout, PurchaseOption
+
+TEST_PURCHASE_OPTIONS = [
+    PurchaseOption(sku="A", quantity=1, price=50, freebies=()),
+    PurchaseOption(sku="A", quantity=3, price=130, freebies=()),
+    PurchaseOption(sku="A", quantity=5, price=200, freebies=()),
+    PurchaseOption(sku="B", quantity=1, price=30, freebies=()),
+    PurchaseOption(sku="B", quantity=2, price=45, freebies=()),
+    PurchaseOption(sku="C", quantity=1, price=20, freebies=()),
+    PurchaseOption(sku="D", quantity=1, price=15, freebies=()),
+    PurchaseOption(sku="E", quantity=1, price=40, freebies=()),
+    PurchaseOption(sku="E", quantity=2, price=80, freebies=tuple("B")),
+    PurchaseOption(sku="F", quantity=1, price=10, freebies=()),
+    PurchaseOption(sku="F", quantity=3, price=20, freebies=())
+]
+
+
+@pytest.fixture
+def checkout():
+    return Checkout(TEST_PURCHASE_OPTIONS)
 
 
 @pytest.mark.parametrize("skus,price", [
@@ -31,28 +50,29 @@ from solutions.CHK import checkout_solution
     ("AAAAAEEAAABC", 200 + 80 + 130 + 20),
     ("AAAAAEEAAAC", 200 + 80 + 130 + 20),
 ])
-def test_checkout(skus, price):
-    assert checkout_solution.checkout(skus) == price
+def test_checkout(checkout, skus, price):
+    assert checkout.checkout(skus) == price
 
 
 @pytest.mark.parametrize("skus", [
     "Z*",
     11,
 ])
-def test_when_illegal_input_then_returns_minus_one(skus):
-    assert checkout_solution.checkout(skus) == -1
+def test_when_illegal_input_then_returns_minus_one(checkout, skus):
+    assert checkout.checkout(skus) == -1
 
 
 def test_offers_sorted_by_most_valuable():
-    least_valuable = checkout_solution.PurchaseOption(sku="A", quantity=3, price=3 * 20, freebies=())
-    most_valuable = checkout_solution.PurchaseOption(sku="A", quantity=2, price=2 * 10, freebies=())
-    middle_valuable = checkout_solution.PurchaseOption(sku="A", quantity=4, price=4 * 15, freebies=())
+    least_valuable = PurchaseOption(sku="A", quantity=3, price=3 * 20, freebies=())
+    most_valuable = PurchaseOption(sku="A", quantity=2, price=2 * 10, freebies=())
+    middle_valuable = PurchaseOption(sku="A", quantity=4, price=4 * 15, freebies=())
 
-    checkout = checkout_solution.Checkout([
-        checkout_solution.PurchaseOption(sku="A", quantity=1, price=100, freebies=()),
+    checkout = Checkout([
+        PurchaseOption(sku="A", quantity=1, price=100, freebies=()),
         least_valuable,
         most_valuable,
         middle_valuable,
     ])
 
     assert checkout.offers_from_best_by_sku["A"] == [most_valuable, middle_valuable, least_valuable]
+
