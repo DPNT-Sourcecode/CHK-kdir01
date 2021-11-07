@@ -36,7 +36,7 @@ def test_checkout(skus, price):
 
 
 @pytest.mark.parametrize("skus", [
-    "Z",
+    "Z*",
     11,
 ])
 def test_when_illegal_input_then_returns_minus_one(skus):
@@ -56,3 +56,4 @@ def test_offers_sorted_by_most_valuable():
     ])
 
     assert checkout.offers_from_best_by_sku["A"] == [most_valuable, middle_valuable, least_valuable]
+

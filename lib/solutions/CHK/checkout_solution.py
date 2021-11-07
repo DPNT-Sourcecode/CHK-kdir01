@@ -3,18 +3,49 @@ from typing import Dict, List
 
 PurchaseOption = namedtuple("OfferInfo", ["sku", "quantity", "price", "freebies"])
 
+# TODO: Add some way to read in input - talk to management about the format
 PURCHASE_OPTIONS = [
     PurchaseOption(sku="A", quantity=1, price=50, freebies=()),
+    PurchaseOption(sku="A", quantity=3, price=130, freebies=()),
+    PurchaseOption(sku="A", quantity=5, price=200, freebies=()),
     PurchaseOption(sku="B", quantity=1, price=30, freebies=()),
+    PurchaseOption(sku="B", quantity=2, price=45, freebies=()),
     PurchaseOption(sku="C", quantity=1, price=20, freebies=()),
     PurchaseOption(sku="D", quantity=1, price=15, freebies=()),
     PurchaseOption(sku="E", quantity=1, price=40, freebies=()),
-    PurchaseOption(sku="F", quantity=1, price=10, freebies=()),
-    PurchaseOption(sku="A", quantity=3, price=130, freebies=()),
-    PurchaseOption(sku="A", quantity=5, price=200, freebies=()),
-    PurchaseOption(sku="B", quantity=2, price=45, freebies=()),
     PurchaseOption(sku="E", quantity=2, price=80, freebies=tuple("B")),
+    PurchaseOption(sku="F", quantity=1, price=10, freebies=()),
     PurchaseOption(sku="F", quantity=3, price=20, freebies=()),
+    PurchaseOption(sku="G", quantity=1, price=20, freebies=()),
+    PurchaseOption(sku="H", quantity=1, price=10, freebies=()),
+    PurchaseOption(sku="H", quantity=5, price=45, freebies=()),
+    PurchaseOption(sku="H", quantity=10, price=80, freebies=()),
+    PurchaseOption(sku="I", quantity=1, price=35, freebies=()),
+    PurchaseOption(sku="J", quantity=1, price=60, freebies=()),
+    PurchaseOption(sku="K", quantity=1, price=80, freebies=()),
+    PurchaseOption(sku="K", quantity=2, price=150, freebies=()),
+    PurchaseOption(sku="L", quantity=1, price=90, freebies=()),
+    PurchaseOption(sku="M", quantity=1, price=15, freebies=()),
+    PurchaseOption(sku="N", quantity=1, price=40, freebies=()),
+    PurchaseOption(sku="N", quantity=3, price=120, freebies=tuple("M")),
+    PurchaseOption(sku="O", quantity=1, price=10, freebies=()),
+    PurchaseOption(sku="P", quantity=1, price=50, freebies=()),
+    PurchaseOption(sku="P", quantity=5, price=200, freebies=()),
+    PurchaseOption(sku="Q", quantity=1, price=30, freebies=()),
+    PurchaseOption(sku="Q", quantity=3, price=80, freebies=()),
+    PurchaseOption(sku="R", quantity=1, price=50, freebies=()),
+    PurchaseOption(sku="R", quantity=3, price=150, freebies=tuple("Q")),
+    PurchaseOption(sku="S", quantity=1, price=30, freebies=()),
+    PurchaseOption(sku="T", quantity=1, price=20, freebies=()),
+    PurchaseOption(sku="U", quantity=1, price=40, freebies=()),
+    PurchaseOption(sku="U", quantity=4, price=120, freebies=()),
+    PurchaseOption(sku="V", quantity=1, price=50, freebies=()),
+    PurchaseOption(sku="V", quantity=2, price=90, freebies=()),
+    PurchaseOption(sku="V", quantity=3, price=130, freebies=()),
+    PurchaseOption(sku="W", quantity=1, price=20, freebies=()),
+    PurchaseOption(sku="X", quantity=1, price=90, freebies=()),
+    PurchaseOption(sku="Y", quantity=1, price=10, freebies=()),
+    PurchaseOption(sku="Z", quantity=1, price=50, freebies=()),
 ]
 
 
@@ -115,4 +146,5 @@ class Checkout:
 # skus = unicode string
 def checkout(skus: str) -> int:
     return Checkout(PURCHASE_OPTIONS).checkout(skus)
+
 
