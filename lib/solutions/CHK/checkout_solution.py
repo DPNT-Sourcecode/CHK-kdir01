@@ -28,6 +28,8 @@ class Checkout:
             else:
                 self.offers_by_sku[po.sku].append(po)
 
+        self._sort_offers_by_most_valuable()
+
         # TODO: Maybe should validate the offers don't mention skus that can't be bought singly?
         # TODO: Other validation (quantity +ve etc.)
         # TODO: Decide if inputting all POs in the same format is the right way to go
@@ -56,14 +58,15 @@ class Checkout:
 
         return price
 
-    def _calculate_po_saving(self, po: PurchaseOption):
+    def _calculate_po_saving_per_item(self, po: PurchaseOption):
         individual_cost = self.prices_by_sku[po.sku] * po.quantity
+        total_saving = individual_cost - po.price
 
-        return individual_cost - po.price
+        return total_saving / po.quantity
 
     def _sort_offers_by_most_valuable(self):
         for offers in self.offers_by_sku.values():
-            offers.sort(key=self._calculate_po_saving)
+            offers.sort(key=self._calculate_po_saving_per_item, reverse=True)
 
     def _validate_and_get_counter(self, skus) -> Counter:
         if type(skus) != str:
